@@ -23,7 +23,8 @@ var app = express();
 // Set up the paths for the examples.
 [
   'mediadevices',
-  'localvideosnapshot'
+  'localvideosnapshot',
+  'localvideofilter'
 ].forEach(function(example) {
   var examplePath = path.join(__dirname, `../examples/${example}/public`);
   app.use(`/${example}`, express.static(examplePath));

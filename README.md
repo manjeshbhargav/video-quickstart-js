@@ -49,6 +49,7 @@ The project contains some common use-case examples for the Twilio Video JS SDK.
 
 * [Media Device Selection](http://localhost:3000/mediadevices)
 * [Local Video Snapshot](http://localhost:3000/localvideosnapshot)
+* [Local Video Filter](http://localhost:3000/localvideofilter)
 
 ## License
 
