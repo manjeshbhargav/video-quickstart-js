@@ -77,8 +77,27 @@ $.getJSON('/token', function(data) {
   // Bind button to leave Room.
   document.getElementById('button-leave').onclick = function() {
     log('Leaving room...');
-    activeRoom.disconnect();
+    leaveRoomIfJoined();
   };
+
+  // Bind buttons to toggle audio and video after joining a Room.
+  ['audio', 'video'].forEach(function(kind) {
+    document.getElementById('toggle-' + kind).onclick = function() {
+      if (!activeRoom) {
+        return;
+      }
+      var localTrack = previewTracks[0].kind === kind
+        ? previewTracks[0] : previewTracks[1];
+
+      if (activeRoom.localParticipant[kind + 'Tracks'].size > 0) {
+        log('Removing local ' + kind + ' from room...');
+        activeRoom.localParticipant.removeTrack(localTrack, false);
+      } else {
+        log('Adding local ' + kind + 'to room...');
+        activeRoom.localParticipant.addTrack(localTrack);
+      }
+    };
+  });
 });
 
 // Successfully connected!
@@ -88,10 +107,12 @@ function roomJoined(room) {
   log("Joined as '" + identity + "'");
   document.getElementById('button-join').style.display = 'none';
   document.getElementById('button-leave').style.display = 'inline';
+  document.getElementById('toggle-media').classList.remove('disconnected');
 
   // Attach LocalParticipant's Tracks, if not already attached.
   var previewContainer = document.getElementById('local-media');
   if (!previewContainer.querySelector('video')) {
+    previewTracks = Array.from(room.localParticipant.tracks.values());
     attachParticipantTracks(room.localParticipant, previewContainer);
   }
 
@@ -167,5 +188,7 @@ function log(message) {
 function leaveRoomIfJoined() {
   if (activeRoom) {
     activeRoom.disconnect();
+    activeRoom = null;
+    document.getElementById('toggle-media').classList.add('disconnected');
   }
 }

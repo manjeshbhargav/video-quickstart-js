@@ -37,6 +37,10 @@ div#controls div {
   float: left;
 }
 
+div#controls div#toggle-media.disconnected {
+  display: none;
+}
+
 div#controls div#room-controls,
 div#controls div#preview {
   width: 16em;
